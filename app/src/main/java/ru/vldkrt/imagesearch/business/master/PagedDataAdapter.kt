@@ -10,12 +10,13 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import ru.vldkrt.imagesearch.databinding.ItemImageBinding
 import ru.vldkrt.imagesearch.domain.entities.ImageResult
+import ru.vldkrt.imagesearch.view.ImageResultComparator
 import ru.vldkrt.imagesearch.view.OnItemClickListener
 
 class PagedDataAdapter(
     var onItemClickListener: OnItemClickListener<ImageResult>? = null,
 ) : PagingDataAdapter<ImageResult, PagedDataAdapter.ImageViewHolder>(
-    diffCallback = COMPARATOR
+    diffCallback = ImageResultComparator()
 ) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -27,26 +28,8 @@ class PagedDataAdapter(
     )
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        val item: ImageResult? = getItem(position)
-
-        if (item != null) holder.bind(item)
-    }
-
-    companion object {
-
-        private val COMPARATOR = object : DiffUtil.ItemCallback<ImageResult>() {
-            override fun areItemsTheSame(
-                oldItem: ImageResult,
-                newItem: ImageResult
-            ): Boolean =
-                oldItem.original == newItem.original
-
-            override fun areContentsTheSame(
-                oldItem: ImageResult,
-                newItem: ImageResult
-            ): Boolean =
-                oldItem == newItem
-        }
+        val item: ImageResult = getItem(position) ?: return
+        holder.bind(item)
     }
 
     // 'inner' means object has a reference to outer class instance, we can use its functions or

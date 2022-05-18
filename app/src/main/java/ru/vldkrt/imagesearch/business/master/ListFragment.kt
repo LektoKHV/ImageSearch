@@ -34,8 +34,6 @@ class ListFragment : Fragment() {
         defaultViewModelProviderFactory
     }
 
-    private var loadJob: Job? = null
-
     private var _binding: FragmentListBinding? = null
 
     // This property is only valid between onCreateView and
@@ -49,7 +47,6 @@ class ListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-
         setHasOptionsMenu(true)
         _binding = FragmentListBinding.inflate(inflater, container, false)
         _adapter = PagedDataAdapter { v, item ->
@@ -104,6 +101,8 @@ class ListFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.images.flowWithLifecycle(viewLifecycleOwner.lifecycle).collect {
                 adapter.submitData(viewLifecycleOwner.lifecycle, it)
+                val snapshot = adapter.snapshot()
+                "dsds"
             }
         }
     }
@@ -162,7 +161,7 @@ class ListFragment : Fragment() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 println("onQueryTextChange")
-                viewModel.setQuery(newText.orEmpty())
+                viewModel.setQuery(newText)
                 return false
             }
         })
@@ -173,16 +172,5 @@ class ListFragment : Fragment() {
         Log.d("LifeCycle", "onDestroyView()")
         _binding = null
         _adapter = null
-    }
-
-
-    private fun load() {
-        // Make sure we cancel the previous job before creating a new one
-        loadJob?.cancel()
-        loadJob = viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.images.collect {
-                adapter.submitData(viewLifecycleOwner.lifecycle, it)
-            }
-        }
     }
 }

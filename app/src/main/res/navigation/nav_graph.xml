@@ -21,7 +21,7 @@
         android:id="@+id/imageFragment"
         android:name="ru.vldkrt.imagesearch.business.detail.ImageFragment"
         android:label="{label}"
-        tools:layout="@layout/fragment_image">
+        tools:layout="@layout/item_image_fullscreen">
         <argument
             android:name="image"
             app:argType="ru.vldkrt.imagesearch.entities.ImageResultUI" />

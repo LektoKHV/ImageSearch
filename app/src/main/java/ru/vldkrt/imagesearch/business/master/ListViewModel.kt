@@ -25,8 +25,8 @@ class ListViewModel @Inject constructor(
 
     private val searchAction = MutableSharedFlow<String>()
 
-    fun setQuery(query: String) {
-        imageFactory.query = query
+    fun setQuery(query: String?) {
+        imageFactory.query = query?.trim().orEmpty()
     }
 
     fun search() {

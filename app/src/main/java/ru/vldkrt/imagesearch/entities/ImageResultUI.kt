@@ -6,6 +6,7 @@ import ru.vldkrt.imagesearch.domain.entities.ImageResult
 
 @Parcelize
 data class ImageResultUI(
+    val isProduct: String? = null,
 
     val thumbnail: String,
 
@@ -18,7 +19,12 @@ data class ImageResultUI(
     val source: String,
 
     val title: String,
+
+    val inStock: String? = null
 ) : Parcelable
 
 fun ImageResult.asUI() =
-    ImageResultUI(thumbnail, original, link, position, source, title)
+    ImageResultUI(isProduct, thumbnail, original, link, position, source, title, inStock)
+
+fun ImageResultUI.asDomain() =
+    ImageResult(isProduct, thumbnail, original, link, position, source, title, inStock)

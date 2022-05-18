@@ -9,10 +9,11 @@ import ru.vldkrt.imagesearch.domain.Resource
 import ru.vldkrt.imagesearch.domain.entities.ImageResult
 import ru.vldkrt.imagesearch.domain.usecases.GetImagesUseCase
 import java.io.IOException
+import javax.inject.Inject
 
 const val STARTING_PAGE_INDEX = 0
 
-class ImagePagingFactory(
+class ImagePagingFactory @Inject constructor(
     private val getImagesUseCase: GetImagesUseCase,
 ) : PagingSource<Int, ImageResult>() {
 

@@ -63,6 +63,8 @@ class WebImageFragment : Fragment() {
                 return@setOnKeyListener false
             }
 
+            webView.settings.javaScriptEnabled = true
+
             // Load the start page
             webView.loadUrl(args.image.link)
         }
