@@ -19,6 +19,8 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.paging.CombinedLoadStates
+import androidx.paging.LoadState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import ru.vldkrt.imagesearch.view.GridSpacingItemDecoration
@@ -54,8 +56,6 @@ class ListFragment : Fragment() {
             runSafely {
                 findNavController().navigate(ListFragmentDirections.actionListFragmentToImagePagerFragment(
                     item.asUI()), extras)
-//                findNavController().navigate(ListFragmentDirections.actionListFragmentToImageFragment(
-//                    item.asUI(), item.title), extras)
             }
         }
 
@@ -73,30 +73,24 @@ class ListFragment : Fragment() {
 
         Log.d("LifeCycle", "onViewCreated()")
 
-        binding.imagesView.adapter = adapter
-        binding.imagesView.addItemDecoration(GridSpacingItemDecoration(2, R.dimen.item_space, 0))
+        binding.imagesView.adapter = adapter.withLoadStateFooter(
+            footer = DiscoverPagedLoadStateAdapter { adapter.retry() }
+        )
+        adapter.addLoadStateListener { loadState: CombinedLoadStates ->
+            // show empty list
+            val isListEmpty = loadState.refresh is LoadState.NotLoading && adapter.itemCount == 0
+            binding.emptyView.isVisible = isListEmpty
+            binding.imagesView.isVisible = !isListEmpty
 
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            viewModel.images.flowWithLifecycle(viewLifecycleOwner.lifecycle).collect { resource ->
-//                binding.progressBar.isVisible = resource is Resource.Loading
-//
-//                when (resource) {
-//                    is Resource.Success -> {
-//                        // Update RecyclerView with new data
-//                        adapter.updateList(resource.data.imagesResults)
-//                    }
-//                    is Resource.Loading -> {}
-//                    is Resource.Error -> {
-//                        // Show error
-//                        Toast.makeText(
-//                            requireContext(),
-//                            resource.errorMessage.orEmpty(),
-//                            Toast.LENGTH_LONG
-//                        ).show()
-//                    }
-//                }
-//            }
-//        }
+            // Show the list only if refresh succeeds.
+            binding.imagesView.isVisible = loadState.source.refresh is LoadState.NotLoading
+            // Show loading spinner during initial load or refresh.
+            binding.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
+            // Show retry button if load failed
+            binding.retryButton.isVisible = loadState.source.refresh is LoadState.Error
+        }
+        binding.imagesView.addItemDecoration(GridSpacingItemDecoration(2, R.dimen.item_space, 0))
+        binding.retryButton.setOnClickListener { adapter.retry() }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.images.flowWithLifecycle(viewLifecycleOwner.lifecycle).collect {
