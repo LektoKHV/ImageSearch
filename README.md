@@ -21,4 +21,3 @@ Written on Kotlin.
   - [Glide](https://bumptech.github.io/glide/): image loading
   - [Hilt](https://developer.android.com/training/dependency-injection/hilt-android): Dependency Injection
   - [Kotlin coroutines](https://kotlinlang.org/docs/coroutines-overview.html): executions code concurrently, Flow usage for managing reactive streams of data
-What a 
