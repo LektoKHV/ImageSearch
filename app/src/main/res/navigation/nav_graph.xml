@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/listFragment">
+
+    <fragment
+        android:id="@+id/listFragment"
+        android:name="ru.vldkrt.imagesearch.business.master.ListFragment"
+        android:label="@string/list_fragment_label"
+        tools:layout="@layout/fragment_list">
+        <action
+            android:id="@+id/action_listFragment_to_imageFragment"
+            app:destination="@id/imageFragment" />
+        <action
+            android:id="@+id/action_listFragment_to_imagePagerFragment"
+            app:destination="@id/imagePagerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/imageFragment"
+        android:name="ru.vldkrt.imagesearch.business.detail.ImageFragment"
+        android:label="{label}"
+        tools:layout="@layout/fragment_image">
+        <argument
+            android:name="image"
+            app:argType="ru.vldkrt.imagesearch.entities.ImageResultUI" />
+        <argument android:name="label"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_imageFragment_to_webImageFragment"
+            app:destination="@id/webImageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/webImageFragment"
+        android:name="ru.vldkrt.imagesearch.business.web.WebImageFragment"
+        android:label="WebImageFragment"
+        tools:layout="@layout/fragment_web">
+        <argument
+            android:name="image"
+            app:argType="ru.vldkrt.imagesearch.entities.ImageResultUI" />
+    </fragment>
+    <fragment
+        android:id="@+id/imagePagerFragment"
+        android:name="ru.vldkrt.imagesearch.business.detail.ImagePagerFragment"
+        android:label="ImagePagerFragment" >
+        <argument
+            android:name="image"
+            app:argType="ru.vldkrt.imagesearch.entities.ImageResultUI" />
+        <action
+            android:id="@+id/action_imagePagerFragment_to_webImageFragment"
+            app:destination="@id/webImageFragment" />
+    </fragment>
+</navigation>

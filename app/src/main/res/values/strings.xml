@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">ImageSearch</string>
+
+    <string name="list_fragment_label">Images</string>
+    <string name="image_fragment_label">Image</string>
+
+    <string name="action_search">Search</string>
+    <string name="open_source">Show source</string>
+    <string name="search_hint">Search...</string>
+</resources>
